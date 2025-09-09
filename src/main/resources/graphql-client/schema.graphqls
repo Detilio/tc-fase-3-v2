@@ -1,0 +1,24 @@
+type Consultation {
+    id: ID!
+    date: String!
+    observations: String
+    patientId: ID!
+    doctorId: ID!
+}
+
+input ConsultationInput {
+    date: String!
+    observations: String
+    patientId: ID!
+    doctorId: ID!
+}
+
+type Query {
+    consultationsByPatient(patientId: ID!): [Consultation!]
+    futureConsultationsByPatient(patientId: ID!): [Consultation!]
+}
+
+type Mutation {
+    createConsultation(input: ConsultationInput!): Consultation
+    updateConsultation(id: ID!, input: ConsultationInput!): Consultation
+}

@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Serviço do Banco de Dados MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 466238
+      MYSQL_DATABASE: hospital
+      MYSQL_USER: user-hospital
+      MYSQL_PASSWORD: 466238
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # Serviço do RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # Serviço da aplicação Java
+  app:
+    build: .
+    container_name: minha-app-java
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      # Configurações para conectar ao RabbitMQ
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/hospital?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user-hospital
+      - SPRING_DATASOURCE_PASSWORD=466238
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+volumes:
+  mysql-data:
