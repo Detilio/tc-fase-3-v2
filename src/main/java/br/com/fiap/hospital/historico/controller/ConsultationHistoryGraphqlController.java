@@ -36,7 +36,7 @@ public class ConsultationHistoryGraphqlController {
 
     @MutationMapping
     @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR')")
-    public ConsultationResponse createConsultation(@Argument ConsultationInput graphQLInput) {
+    public ConsultationResponse createConsultation(@Argument(name = "input") ConsultationInput graphQLInput) {
         ConsultationRequest serviceRequest = new ConsultationRequest(
                 graphQLInput.patientId(),
                 graphQLInput.doctorId(),
@@ -48,7 +48,7 @@ public class ConsultationHistoryGraphqlController {
 
     @MutationMapping
     @PreAuthorize("hasRole('DOCTOR')")
-    public ConsultationResponse updateConsultation(@Argument Long id, @Argument ConsultationInput graphQLInput) {
+    public ConsultationResponse updateConsultation(@Argument Long id, @Argument(name = "input")  ConsultationInput graphQLInput) {
         ConsultationRequest serviceRequest = new ConsultationRequest(
                 graphQLInput.patientId(),
                 graphQLInput.doctorId(),
