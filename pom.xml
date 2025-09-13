@@ -6,10 +6,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<!--		<version>3.5.5</version>-->
 		<version>3.3.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+		<relativePath/> </parent>
 
 	<groupId>br.com.fiap</groupId>
 	<artifactId>tc-fase-3</artifactId>
@@ -22,7 +20,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Banco de Dados -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -33,7 +30,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Web + Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -66,70 +62,63 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 
-			<!-- GraphQL Codegen -->
 			<plugin>
 				<groupId>io.github.deweyjose</groupId>
 				<artifactId>graphqlcodegen-maven-plugin</artifactId>
-				<version>1.61.5</version>
-				<executions>
-					<execution>
-						<id>dgs-codegen</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaPaths>
-								<param>src/main/resources/graphql-client</param>
-							</schemaPaths>
-							<packageName>br.com.fiap.hospital.codegen</packageName>
-							<addGeneratedAnnotation>true</addGeneratedAnnotation>
-							<disableDatesInGeneratedAnnotation>true</disableDatesInGeneratedAnnotation>
-						</configuration>
-					</execution>
-				</executions>
+				<version>1.50</version> <executions>
+				<execution>
+					<id>dgs-codegen</id>
+					<goals>
+						<goal>generate</goal>
+					</goals>
+					<configuration>
+						<schemaPaths>
+							<param>src/main/resources/graphql</param>
+						</schemaPaths>
+						<packageName>br.com.fiap.tc.fase.3.generated</packageName>
+						<addGeneratedAnnotation>true</addGeneratedAnnotation>
+					</configuration>
+				</execution>
+			</executions>
 			</plugin>
 
-			<!-- Helper -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
-						<id>add-dgs-source</id>
+						<id>add-source</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-source</goal>
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.build.directory}/generated-sources</source>
+								<source>${project.build.directory}/generated-sources/java</source>
 							</sources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
-			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

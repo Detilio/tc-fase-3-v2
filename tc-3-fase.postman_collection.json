@@ -28,7 +28,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"patientId\" : 2,\r\n    \"doctorId\" : 1,\r\n    \"date\" : \"2025-10-24T10:00:00\",\r\n    \"observations\" : \"Consulta de rotina\"\r\n}",
+					"raw": "{\r\n    \"patientId\" : 1,\r\n    \"doctorId\" : 2,\r\n    \"date\" : \"2025-10-24T10:00:00\",\r\n    \"observations\" : \"Consulta de rotina\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,7 +107,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"Thifani Melissa\",\r\n    \"password\" : \"466238\",\r\n    \"login\" : \"thifani.melissa\",\r\n    \"roles\" : [\"PATIENT\"]\r\n}",
+					"raw": "{\r\n    \"name\" : \"Rafael Detilio\",\r\n    \"password\" : \"466238\",\r\n    \"login\" : \"rafael.detilio\",\r\n    \"roles\" : [\"DOCTOR\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -185,7 +185,7 @@
 			"response": []
 		},
 		{
-			"name": "graphiql",
+			"name": "graphiql-consulta-por-id-paciente",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -218,14 +218,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/graphql-client",
+					"raw": "http://localhost:8080/graphql",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"graphql-client"
+						"graphql"
 					]
 				}
 			},
