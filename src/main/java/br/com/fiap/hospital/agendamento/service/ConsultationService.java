@@ -9,6 +9,7 @@ import br.com.fiap.hospital.config.RabbitMQConfig;
 import br.com.fiap.hospital.notificacao.dto.NotificationDto;
 import br.com.fiap.hospital.notificacao.service.NotificationService;
 import br.com.fiap.hospital.shared.ResourceNotFoundException;
+import br.com.fiap.hospital.shared.ValidateConsultationException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,25 @@ public class ConsultationService {
      */
     @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR')")
     public ConsultationResponse criarConsulta(ConsultationRequest request) {
+        // Vaçoda id do paciente
+        if (!this.validaPaciente(request.getPatientId())) {
+            throw new ResourceNotFoundException("Paciente com ID " + request.getPatientId() + " não encontrado.");
+        }
+        // Valida id do médico
+        if (!this.validaDoutor(request.getDoctorId())) {
+            throw new ResourceNotFoundException("Doutor com ID " + request.getDoctorId() + " não encontrado.");
+        }
+
+        // Valida se já existe consulta agendada nesta data para o paciente
+        if (validaDataConsultaPaciente(request.getPatientId(), request.getDate())) {
+            throw new ValidateConsultationException("Já existe uma consulta agendada para este paciente nesta mesma data e horário.");
+        }
+
+        // Valida se já existe consulta agendada nesta data para o doutor
+        if (validaDataConsultaDoutor(request.getDoctorId(), request.getDate())) {
+            throw new ValidateConsultationException("Já existe consulta para este doutor nesta mesma data e horário.");
+        }
+
         ConsultationEntity entity = ConsultationMapper.toEntity(request);
         ConsultationEntity saved = repository.save(entity);
         ConsultationResponse response = ConsultationMapper.toResponse(saved);
@@ -89,5 +109,33 @@ public class ConsultationService {
                 .stream()
                 .map(ConsultationMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Valida se o paciente existe
+     */
+    public boolean validaPaciente(Long patientId) {
+        return repository.existsByPatientId(patientId);
+    }
+
+    /**
+     * Valida se o doutor existe
+     */
+    public boolean validaDoutor(Long doctorId) {
+        return repository.existsByDoctorId(doctorId);
+    }
+
+    /**
+     * Valida se já existe consulta para a data especificada para o paciente
+     */
+    public boolean validaDataConsultaPaciente(Long patientId, LocalDateTime date) {
+        return repository.existsByPatientIdAndDate(patientId, date);
+    }
+
+    /**
+     * Valida se já existe consulta para a data especificada para o doutor
+     */
+    public boolean validaDataConsultaDoutor(Long doutorId, LocalDateTime date) {
+        return repository.existsByDoctorIdAndDate(doutorId, date);
     }
 }

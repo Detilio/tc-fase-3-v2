@@ -4,10 +4,10 @@ import br.com.fiap.hospital.auth.dto.UserRequest;
 import br.com.fiap.hospital.auth.dto.UserResponse;
 import br.com.fiap.hospital.auth.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,6 +21,14 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserResponse> criar(@RequestBody UserRequest request) {
         return ResponseEntity.ok(userService.registerUser(request));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('DOCTOR', 'NURSE')")
+    public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(required = false) String role) {
+
+        List<UserResponse> users = userService.findAllUsers(role);
+        return ResponseEntity.ok(users);
     }
 
 }

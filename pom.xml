@@ -7,7 +7,8 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.3</version>
-		<relativePath/> </parent>
+		<relativePath/>
+	</parent>
 
 	<groupId>br.com.fiap</groupId>
 	<artifactId>tc-fase-3</artifactId>
@@ -78,47 +79,6 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>io.github.deweyjose</groupId>
-				<artifactId>graphqlcodegen-maven-plugin</artifactId>
-				<version>1.50</version> <executions>
-				<execution>
-					<id>dgs-codegen</id>
-					<goals>
-						<goal>generate</goal>
-					</goals>
-					<configuration>
-						<schemaPaths>
-							<param>src/main/resources/graphql</param>
-						</schemaPaths>
-						<packageName>br.com.fiap.tc.fase.3.generated</packageName>
-						<addGeneratedAnnotation>true</addGeneratedAnnotation>
-					</configuration>
-				</execution>
-			</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${project.build.directory}/generated-sources/java</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

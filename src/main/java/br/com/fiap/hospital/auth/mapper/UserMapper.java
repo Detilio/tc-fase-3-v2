@@ -16,6 +16,7 @@ public class UserMapper {
 
     public static UserResponse toResponse(UserEntity model) {
         return UserResponse.builder()
+                .id(model.getId())
                 .name(model.getName())
                 .password(model.getPassword())
                 .login(model.getLogin())

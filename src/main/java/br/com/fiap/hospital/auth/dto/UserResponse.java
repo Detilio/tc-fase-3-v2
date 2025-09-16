@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserResponse {
+    private Long id;
     private String name;
     private String password;
     private String login;

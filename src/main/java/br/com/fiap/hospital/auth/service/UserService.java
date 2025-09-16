@@ -5,9 +5,14 @@ import br.com.fiap.hospital.auth.dto.UserResponse;
 import br.com.fiap.hospital.auth.entity.UserEntity;
 import br.com.fiap.hospital.auth.mapper.UserMapper;
 import br.com.fiap.hospital.auth.repository.UserRepository;
+import br.com.fiap.hospital.shared.ResourceNotFoundException;
+import br.com.fiap.hospital.shared.Role;
 import br.com.fiap.hospital.shared.UserAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -29,4 +34,25 @@ public class UserService {
         UserEntity saved = userRepository.save(entity);
         return UserMapper.toResponse(saved);
     }
+
+    public List<UserResponse> findAllUsers(String role) {
+        List<UserEntity> users;
+
+        if (role != null && !role.trim().isEmpty()) {
+            try {
+                Role roleEnum = Role.valueOf(role.toUpperCase());
+                users = userRepository.findByRoles(roleEnum);
+
+            } catch (IllegalArgumentException e) {
+                throw new ResourceNotFoundException("A role '" + role + "' não é válida.");
+            }
+        } else {
+            users = userRepository.findAll();
+        }
+
+        return users.stream()
+                .map(UserMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }

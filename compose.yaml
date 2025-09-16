@@ -14,6 +14,8 @@ services:
       MYSQL_PASSWORD: 466238
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
 
   # Serviço do RabbitMQ
   rabbitmq:
@@ -22,6 +24,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - app-network
 
   # Serviço da aplicação Java
   app:
@@ -33,12 +37,19 @@ services:
       - mysql
       - rabbitmq
     environment:
-      # Configurações para conectar ao RabbitMQ
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/hospital?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=user-hospital
       - SPRING_DATASOURCE_PASSWORD=466238
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_ADDRESS=0.0.0.0
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   mysql-data:
+
+networks:
+  app-network:
+    driver: bridge
