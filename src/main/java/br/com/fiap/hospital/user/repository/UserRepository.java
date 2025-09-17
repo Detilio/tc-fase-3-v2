@@ -1,6 +1,6 @@
-package br.com.fiap.hospital.auth.repository;
+package br.com.fiap.hospital.user.repository;
 
-import br.com.fiap.hospital.auth.entity.UserEntity;
+import br.com.fiap.hospital.user.entity.UserEntity;
 import br.com.fiap.hospital.shared.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

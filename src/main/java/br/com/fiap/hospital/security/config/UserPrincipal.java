@@ -1,6 +1,6 @@
-package br.com.fiap.hospital.auth.security;
+package br.com.fiap.hospital.security.config;
 
-import br.com.fiap.hospital.auth.entity.UserEntity;
+import br.com.fiap.hospital.user.entity.UserEntity;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

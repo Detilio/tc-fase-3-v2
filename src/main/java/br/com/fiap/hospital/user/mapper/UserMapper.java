@@ -1,8 +1,8 @@
-package br.com.fiap.hospital.auth.mapper;
+package br.com.fiap.hospital.user.mapper;
 
-import br.com.fiap.hospital.auth.dto.UserRequest;
-import br.com.fiap.hospital.auth.dto.UserResponse;
-import br.com.fiap.hospital.auth.entity.UserEntity;
+import br.com.fiap.hospital.user.dto.UserRequest;
+import br.com.fiap.hospital.user.dto.UserResponse;
+import br.com.fiap.hospital.user.entity.UserEntity;
 
 public class UserMapper {
     public static UserEntity toEntity(UserRequest model) {

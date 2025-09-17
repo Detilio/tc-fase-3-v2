@@ -1,4 +1,4 @@
-package br.com.fiap.hospital.shared;
+package br.com.fiap.hospital.shared.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +31,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidateConsultationException.class)
     public ResponseEntity<ErrorResponse> handleValidateConsultationException(ValidateConsultationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserHasActiveConsultationException.class)
+    public ResponseEntity<ErrorResponse> handleUserHasActiveConsultation(UserHasActiveConsultationException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

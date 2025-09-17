@@ -1,4 +1,4 @@
-package br.com.fiap.hospital.auth.dto;
+package br.com.fiap.hospital.user.dto;
 
 import br.com.fiap.hospital.shared.Role;
 import lombok.AllArgsConstructor;

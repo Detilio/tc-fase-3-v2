@@ -28,7 +28,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"patientId\" : 1,\r\n    \"doctorId\" : 2,\r\n    \"date\" : \"2025-10-24T10:00:00\",\r\n    \"observations\" : \"Consulta de rotina\"\r\n}",
+					"raw": "{\r\n    \"patientId\" : 4,\r\n    \"doctorId\" : 1,\r\n    \"date\" : \"2025-10-24T10:00:00\",\r\n    \"observations\" : \"Consulta de rotina\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -92,7 +92,7 @@
 			"response": []
 		},
 		{
-			"name": "users-registrar",
+			"name": "usuários-criar",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -107,7 +107,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"Rafael Detilio\",\r\n    \"password\" : \"466238\",\r\n    \"login\" : \"rafael.detilio\",\r\n    \"roles\" : [\"DOCTOR\"]\r\n}",
+					"raw": "{\r\n    \"name\" : \"Joana\",\r\n    \"password\" : \"123456\",\r\n    \"login\" : \"joana.silva\",\r\n    \"roles\" : [\"PATIENT\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,15 +115,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/register",
+					"raw": "http://localhost:8080/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"auth",
-						"register"
+						"users"
 					]
 				}
 			},
@@ -185,6 +184,58 @@
 			"response": []
 		},
 		{
+			"name": "usuarios-consultar",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "ana.silva",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "graphiql-consulta-por-id-paciente",
 			"request": {
 				"auth": {
@@ -215,6 +266,147 @@
 					"graphql": {
 						"query": "{\r\n  consultationsByPatient(patientId: 2) {\r\n    id\r\n    observations\r\n    date\r\n    patientId\r\n    doctorId\r\n  }\r\n}  ",
 						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "graphiql-consultas-futuras",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "466238",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "rafael.detilio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\r\n  futureConsultationsByPatient(patientId: 2) {\r\n    id\r\n    observations\r\n    date\r\n    patientId\r\n    doctorId\r\n  }\r\n}  ",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "graphiql-criar-consultas",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "466238",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "rafael.detilio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation CreateNewConsultation($input: ConsultationInput!) {\r\n  createConsultation(input: $input) {\r\n    date\r\n    observations\r\n    patientId\r\n    doctorId\r\n  }\r\n}",
+						"variables": "{\r\n  \"input\": {\r\n    \"patientId\": \"2\",\r\n    \"doctorId\": \"1\",\r\n    \"date\": \"2025-10-30T10:00:00\",\r\n    \"observations\": \"Paciente relata dor de cabeça.\"\r\n  }\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "graphiql-alterar-consultas",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "466238",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "rafael.detilio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation UpdateExistingConsultation($id: ID!, $input: ConsultationInput!) {\r\n  updateConsultation(id: $id, input: $input) {\r\n    id\r\n    date\r\n    observations\r\n    patientId\r\n    doctorId\r\n  }\r\n}",
+						"variables": "{\r\n  \"id\": 4,\r\n  \"input\": {\r\n    \"patientId\": \"2\",\r\n    \"doctorId\": \"1\",\r\n    \"date\": \"2025-10-24T10:00:00\",\r\n    \"observations\": \"Paciente relata dor de barriga.\"\r\n  }\r\n}"
 					}
 				},
 				"url": {

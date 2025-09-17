@@ -1,8 +1,8 @@
-package br.com.fiap.hospital.auth.service;
+package br.com.fiap.hospital.security.service;
 
-import br.com.fiap.hospital.auth.entity.UserEntity;
-import br.com.fiap.hospital.auth.repository.UserRepository;
-import br.com.fiap.hospital.auth.security.UserPrincipal;
+import br.com.fiap.hospital.security.config.UserPrincipal;
+import br.com.fiap.hospital.user.entity.UserEntity;
+import br.com.fiap.hospital.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,8 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + login));
-
-        // Retorne a nova classe UserPrincipal!
         return new UserPrincipal(userEntity);
     }
 }
