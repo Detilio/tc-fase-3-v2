@@ -1,0 +1,991 @@
+{
+	"info": {
+		"_postman_id": "8df12e1a-1832-412e-addf-2d9c7cce22d2",
+		"name": "Tech Challenge Fase 3",
+		"description": "Collection pronta para testes por papéis.\n- Sem variáveis de collection/environment.\n- Base URL fixa em http://localhost:8080.\n- Endpoints protegidos com Basic Auth (placeholders de usuário/senha por papel).\n- Registro de usuário aberto em POST /users.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9590839",
+		"_collection_link": "https://speeding-resonance-2273.postman.co/workspace/Fiap~ea9688b0-2bb0-4396-8c24-02168211d52c/collection/9590839-8df12e1a-1832-412e-addf-2d9c7cce22d2?action=share&source=collection_link&creator=9590839"
+	},
+	"item": [
+		{
+			"name": "Registro",
+			"item": [
+				{
+					"name": "Registrar Doutor",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Doutor Teste\",\n  \"login\": \"doutor.user\",\n  \"password\": \"doutor123\",\n  \"roles\": [\n    \"DOCTOR\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "Cria um novo usuário. Aberto conforme SecurityConfig (permitAll em POST /users)."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Enfermeiro",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Enfermeiro Teste\",\n  \"login\": \"enfer.login\",\n  \"password\": \"enfermeiro123\",\n  \"roles\": [\n    \"NURSE\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "Cria um novo usuário. Aberto conforme SecurityConfig (permitAll em POST /users)."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Paciente",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Paciente Teste2\",\n  \"login\": \"paciente2.login\",\n  \"password\": \"paciente123\",\n  \"roles\": [\n    \"PATIENT\"\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						},
+						"description": "Cria um novo usuário. Aberto conforme SecurityConfig (permitAll em POST /users)."
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar ID (Doutor e Enfermeiro)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "doutor123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "doutor.user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Paciente",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "Futuras do paciente",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "paciente123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "paciente.login",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/consultas/paciente/3/futuras",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas",
+										"paciente",
+										"3",
+										"futuras"
+									]
+								},
+								"description": "Retorna consultas futuras do paciente informado. Ajuste o ID na URL conforme necessário."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GraphQL",
+					"item": [
+						{
+							"name": "todos agendamentos por paciente(GraphQL)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "paciente.login",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "paciente123",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\":\"query { consultationsByPatient(patientId: 3) { id observations date patientId doctorId } }\"}\r\n"
+								},
+								"url": {
+									"raw": "http://localhost:8080/graphql",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"graphql"
+									]
+								},
+								"description": "Consulta o histórico do próprio paciente via GraphQL (troque o patientId conforme necessário)."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Enfermeiro",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "Futuras do paciente (ex.: id=2)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "enfermeiro123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "enfer.login",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/consultas/paciente/3/futuras",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas",
+										"paciente",
+										"3",
+										"futuras"
+									]
+								},
+								"description": "Leitura permitida ao perfil ENFERMEIRO."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Criar consulta",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "enfermeiro123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "enfer.login",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"patientId\": 3,\n  \"doctorId\": 1,\n  \"date\": \"2025-11-30T10:00:00\",\n  \"observations\": \"Consulta de rotina\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/consultas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas"
+									]
+								},
+								"description": "Registro de consulta (permitido a ENFERMEIRO e DOUTOR)."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Editar consulta (ex.: id=11)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "enfermeiro123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "enfer.login",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"patientId\": 3,\n  \"doctorId\": 1,\n  \"date\": \"2025-11-23T10:00:00\",\n  \"observations\": \"Exame de urina\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/consultas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas",
+										"1"
+									]
+								},
+								"description": "Edição de consulta (permitido a ENFERMEIRO e DOUTOR). Ajuste o ID."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GraphQL",
+					"item": [
+						{
+							"name": "consultar por paciente (GraphQL)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "enfermeiro123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "enfer.login",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\":\"query { consultationsByPatient(patientId: 3) { id observations date patientId doctorId } }\"}\r\n"
+								},
+								"url": {
+									"raw": "http://localhost:8080/graphql",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"graphql"
+									]
+								},
+								"description": "Consulta via GraphQL."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Doutor",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "Futuras do paciente (ex.: id=2)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "doutor123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "doutor.user",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/consultas/paciente/3/futuras",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas",
+										"paciente",
+										"3",
+										"futuras"
+									]
+								},
+								"description": "Leitura permitida ao perfil DOUTOR."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Criar consulta",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "doutor.user",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "doutor123",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"patientId\": 3,\n    \"doctorId\": 1,\n    \"date\": \"2025-11-23T10:00:00\",\n    \"observations\": \"Exame de urina\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/consultas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas"
+									]
+								},
+								"description": "Criação de consulta (DOUTOR)."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Editar consulta (ex.: id=11)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "doutor.user",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "doutor123",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"patientId\": 3,\n  \"doctorId\": 1,\n  \"date\": \"2025-11-23T10:00:00\",\n  \"observations\": \"Exame de urina\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/consultas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"consultas",
+										"1"
+									]
+								},
+								"description": "Edição de consulta (DOUTOR)."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GraphQL",
+					"item": [
+						{
+							"name": "consultar por paciente (GraphQL)",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "doutor123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "doutor.user",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\":\"query { consultationsByPatient(patientId: 4) { id observations date patientId doctorId } }\"}\r\n"
+								},
+								"url": {
+									"raw": "http://localhost:8080/graphql",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"graphql"
+									]
+								},
+								"description": "Consulta via GraphQL."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"/**\r",
+					" * Dados dinâmicos e helpers para toda a execução\r",
+					" * Obs.: usamos pm.globals APENAS em memória do Runner (não altera sua collection JSON).\r",
+					" */\r",
+					"\r",
+					"(function initOnce () {\r",
+					"  const once = pm.globals.get('init_done');\r",
+					"  if (once) return;\r",
+					"\r",
+					"  // --- Config de credenciais (ajuste conforme você criou no /users) ---\r",
+					"  const creds = {\r",
+					"    doctor:  { user: \"doctor.user\",   pass: \"SENHA_AQUI\" },\r",
+					"    nurse:   { user: \"nurse.user\",    pass: \"SENHA_AQUI\" },\r",
+					"    patient: { user: \"paciente.user\", pass: \"SENHA_AQUI\" }\r",
+					"  };\r",
+					"\r",
+					"  // Ids de paciente para testes (próprio vs outro)\r",
+					"  const patientIds = {\r",
+					"    own:   2,     // id do paciente de teste (o \"paciente.user\")\r",
+					"    other: 9999   // use um que exista e NÃO seja o do paciente de teste\r",
+					"  };\r",
+					"\r",
+					"  // Datas futuras para as consultas\r",
+					"  function isoFuture(hoursFromNow) {\r",
+					"    const d = new Date(Date.now() + hoursFromNow * 3600 * 1000);\r",
+					"    return d.toISOString().slice(0,19); // yyyy-MM-ddTHH:mm:ss\r",
+					"  }\r",
+					"\r",
+					"  const payloads = {\r",
+					"    createConsult: (patientId, doctorId) => ({\r",
+					"      patientId: patientId,\r",
+					"      doctorId: doctorId,\r",
+					"      date: isoFuture(48), // +48h\r",
+					"      observations: \"Consulta automática de teste\"\r",
+					"    }),\r",
+					"    updateConsult: (patientId, doctorId) => ({\r",
+					"      patientId: patientId,\r",
+					"      doctorId: doctorId,\r",
+					"      date: isoFuture(72), // +72h\r",
+					"      observations: \"Consulta editada (teste)\"\r",
+					"    })\r",
+					"  };\r",
+					"\r",
+					"  pm.globals.set('creds', JSON.stringify(creds));\r",
+					"  pm.globals.set('patientIds', JSON.stringify(patientIds));\r",
+					"  pm.globals.set('payloads_defined', '1');\r",
+					"\r",
+					"  // ids capturados durante a execução\r",
+					"  pm.globals.set('consultaId_enf', '');\r",
+					"  pm.globals.set('consultaId_doc', '');\r",
+					"\r",
+					"  // Ordem de execução (nomes dos requests exatamente como aparecem na collection)\r",
+					"  // Ajuste se seus nomes diferirem.\r",
+					"  const ORDER = [\r",
+					"    // Registro (aberto)\r",
+					"    \"Registrar usuário (aberto)\", // doctor\r",
+					"    \"Registrar usuário (aberto)\", // nurse (rode novamente alterando login no body)\r",
+					"    \"Registrar usuário (aberto)\", // paciente (rode novamente alterando login no body)\r",
+					"\r",
+					"    // Sanidade de proteção (negativo): crie um request SEM auth para GET futuras\r",
+					"    \"Paciente • Futuras (sem auth)\",\r",
+					"\r",
+					"    // Paciente - próprio id\r",
+					"    \"Paciente • Futuras (próprio id)\",\r",
+					"    \"Paciente • GraphQL consultationsByPatient (próprio id)\",\r",
+					"\r",
+					"    // Paciente - outro id (negativo) -> duplique o GET/GraphQL com outro id\r",
+					"    \"Paciente • Futuras (outro id)\",\r",
+					"    \"Paciente • GraphQL consultationsByPatient (outro id)\",\r",
+					"\r",
+					"    // Enfermeiro\r",
+					"    \"Enfermeiro • Criar consulta\",\r",
+					"    \"Enfermeiro • Futuras (verifica inclusão)\",\r",
+					"    \"Enfermeiro • Editar consulta\",\r",
+					"    \"Enfermeiro • Deletar consulta (negado)\",\r",
+					"\r",
+					"    // Doutor\r",
+					"    \"Doutor • Criar consulta\",\r",
+					"    \"Doutor • Editar consulta\",\r",
+					"    \"Doutor • Deletar consulta\",\r",
+					"    \"Doutor • Futuras\",\r",
+					"    \"Doutor • GraphQL consultationsByPatient\"\r",
+					"  ];\r",
+					"  pm.globals.set('ORDER', JSON.stringify(ORDER));\r",
+					"\r",
+					"  pm.globals.set('init_done', '1');\r",
+					"})();\r",
+					"\r",
+					"/**\r",
+					" * Helper para montar rapidamente bodies dinâmicos em requests que usem raw JSON.\r",
+					" * Se você quiser, pode referenciar estes dados no corpo com {{}} — mas não é obrigatório.\r",
+					" */\r",
+					"if (pm.globals.get('payloads_defined') === '1') {\r",
+					"  const creds = JSON.parse(pm.globals.get('creds'));\r",
+					"  const pids  = JSON.parse(pm.globals.get('patientIds'));\r",
+					"\r",
+					"  pm.globals.set('body_create_patient', JSON.stringify({\r",
+					"    name: \"Paciente Teste\",\r",
+					"    login: \"paciente.user\",\r",
+					"    password: \"SENHA_AQUI\",\r",
+					"    roles: [\"PATIENT\"]\r",
+					"  }, null, 2));\r",
+					"\r",
+					"  pm.globals.set('body_create_doctor', JSON.stringify({\r",
+					"    name: \"Doutor Teste\",\r",
+					"    login: \"doctor.user\",\r",
+					"    password: \"SENHA_AQUI\",\r",
+					"    roles: [\"DOCTOR\"]\r",
+					"  }, null, 2));\r",
+					"\r",
+					"  pm.globals.set('body_create_nurse', JSON.stringify({\r",
+					"    name: \"Enfermeiro Teste\",\r",
+					"    login: \"nurse.user\",\r",
+					"    password: \"SENHA_AQUI\",\r",
+					"    roles: [\"NURSE\"]\r",
+					"  }, null, 2));\r",
+					"\r",
+					"  // Exemplo de criação/edição de consulta com ids padrão\r",
+					"  pm.globals.set('body_consulta_create', JSON.stringify({\r",
+					"    patientId: pids.own,\r",
+					"    doctorId:  2,\r",
+					"    date: (new Date(Date.now() + 48*3600*1000)).toISOString().slice(0,19),\r",
+					"    observations: \"Consulta automática de teste\"\r",
+					"  }, null, 2));\r",
+					"\r",
+					"  pm.globals.set('body_consulta_update', JSON.stringify({\r",
+					"    patientId: pids.own,\r",
+					"    doctorId:  2,\r",
+					"    date: (new Date(Date.now() + 72*3600*1000)).toISOString().slice(0,19),\r",
+					"    observations: \"Consulta editada (teste)\"\r",
+					"  }, null, 2));\r",
+					"}\r",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"/**\r",
+					" * Orquestra a ordem e valida permissões por papel.\r",
+					" * Usa o nome do request para decidir os asserts e o próximo passo.\r",
+					" */\r",
+					"\r",
+					"function nextByOrder() {\r",
+					"  const ORDER = JSON.parse(pm.globals.get('ORDER') || \"[]\");\r",
+					"  const ix = ORDER.indexOf(pm.info.requestName);\r",
+					"  if (ix >= 0 && ix < ORDER.length - 1) {\r",
+					"    postman.setNextRequest(ORDER[ix + 1]);\r",
+					"  } else {\r",
+					"    postman.setNextRequest(null); // fim\r",
+					"  }\r",
+					"}\r",
+					"\r",
+					"// Helpers\r",
+					"function expectStatus(oneOf) {\r",
+					"  pm.test(\"HTTP status esperado\", () => {\r",
+					"    pm.expect(pm.response.code).to.be.oneOf(oneOf);\r",
+					"  });\r",
+					"}\r",
+					"\r",
+					"function saveIdIfPresent(targetVar) {\r",
+					"  try {\r",
+					"    const data = pm.response.json();\r",
+					"    if (data && (data.id || data.consultationId)) {\r",
+					"      const id = data.id || data.consultationId;\r",
+					"      pm.globals.set(targetVar, String(id));\r",
+					"    }\r",
+					"  } catch(e) {}\r",
+					"}\r",
+					"\r",
+					"// ===== Regras por request (baseado no nome) =====\r",
+					"const name = pm.info.requestName;\r",
+					"\r",
+					"// 1) Registro (aberto)\r",
+					"if (name === \"Registrar usuário (aberto)\") {\r",
+					"  expectStatus([200, 201, 409]); // 409 se já existir\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// 2) Sanidade sem Auth (negativo)\r",
+					"if (name === \"Paciente • Futuras (sem auth)\") {\r",
+					"  pm.test(\"Protegido sem autenticação\", () => pm.expect(pm.response.code).to.eql(401));\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// 3) Paciente — próprio id (pode ver)\r",
+					"if (name === \"Paciente • Futuras (próprio id)\") {\r",
+					"  expectStatus([200]);\r",
+					"  pm.test(\"Retorna lista de consultas\", () => {\r",
+					"    const json = pm.response.json();\r",
+					"    pm.expect(json).to.be.an(\"array\");\r",
+					"  });\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Paciente • GraphQL consultationsByPatient (próprio id)\") {\r",
+					"  expectStatus([200]);\r",
+					"  pm.test(\"GraphQL data presente\", () => {\r",
+					"    const json = pm.response.json();\r",
+					"    pm.expect(json).to.have.property(\"data\");\r",
+					"    pm.expect(json.data).to.have.property(\"consultationsByPatient\");\r",
+					"  });\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// 4) Paciente — outro id (negado)\r",
+					"if (name === \"Paciente • Futuras (outro id)\") {\r",
+					"  pm.test(\"Acesso negado a outro paciente (GET)\", () => pm.expect(pm.response.code).to.eql(403));\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Paciente • GraphQL consultationsByPatient (outro id)\") {\r",
+					"  pm.test(\"Acesso negado a outro paciente (GraphQL)\", () => pm.expect(pm.response.code).to.be.oneOf([401,403]));\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// 5) Enfermeiro\r",
+					"if (name === \"Enfermeiro • Criar consulta\") {\r",
+					"  expectStatus([200,201]);\r",
+					"  saveIdIfPresent('consultaId_enf');\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Enfermeiro • Futuras (verifica inclusão)\") {\r",
+					"  expectStatus([200]);\r",
+					"  pm.test(\"Lista inclui pelo menos 1 item\", () => {\r",
+					"    const json = pm.response.json();\r",
+					"    pm.expect(json).to.be.an(\"array\");\r",
+					"    pm.expect(json.length).to.be.at.least(1);\r",
+					"  });\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Enfermeiro • Editar consulta\") {\r",
+					"  // Certifique-se de usar /consultas/{{consultaId_enf}} na URL deste request\r",
+					"  expectStatus([200]);\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Enfermeiro • Deletar consulta (negado)\") {\r",
+					"  // Se seu backend proibir delete pelo enfermeiro, deve retornar 403\r",
+					"  pm.test(\"Delete negado ao ENFERMEIRO\", () => pm.expect(pm.response.code).to.eql(403));\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// 6) Doutor\r",
+					"if (name === \"Doutor • Criar consulta\") {\r",
+					"  expectStatus([200,201]);\r",
+					"  saveIdIfPresent('consultaId_doc');\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Doutor • Editar consulta\") {\r",
+					"  // Use /consultas/{{consultaId_doc}} na URL deste request\r",
+					"  expectStatus([200]);\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Doutor • Deletar consulta\") {\r",
+					"  expectStatus([200,204]); // conforme sua API\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Doutor • Futuras\") {\r",
+					"  expectStatus([200]);\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"if (name === \"Doutor • GraphQL consultationsByPatient\") {\r",
+					"  expectStatus([200]);\r",
+					"  pm.test(\"GraphQL data presente\", () => {\r",
+					"    const json = pm.response.json();\r",
+					"    pm.expect(json).to.have.property(\"data\");\r",
+					"  });\r",
+					"  nextByOrder();\r",
+					"  return;\r",
+					"}\r",
+					"\r",
+					"// Default: se o nome não casou, apenas segue\r",
+					"nextByOrder();\r",
+					""
+				]
+			}
+		}
+	]
+}
