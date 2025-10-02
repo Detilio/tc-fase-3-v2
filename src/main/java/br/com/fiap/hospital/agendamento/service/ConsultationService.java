@@ -84,6 +84,20 @@ public class ConsultationService {
     public ConsultationResponse editarConsulta(Long consultaId, ConsultationRequest request) {
         ConsultationEntity existingConsultation = repository.findById(consultaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada com o ID: " + consultaId));
+
+        // Se trocar data/horário ou médico, valide conflitos
+        Long doctorId = request.getDoctorId();
+        Long patientId = request.getPatientId();
+        LocalDateTime date = request.getDate();
+
+        // conflito com o mesmo médico no mesmo horário (exclui a própria consulta)
+        if (repository.existsByDoctorIdAndDateAndIdNot(doctorId, date, consultaId)) {
+            throw new ValidateConsultationException("Médico já possui consulta nesta data e horário.");
+        }
+        // (opcional) conflito do paciente no mesmo horário
+        if (repository.existsByPatientIdAndDateAndIdNot(patientId, date, consultaId)) {
+            throw new ValidateConsultationException("Paciente já possui consulta nesta data e horário.");
+        }
         ConsultationMapper.updateEntityFromRequest(request, existingConsultation);
         ConsultationEntity updatedConsultation = repository.save(existingConsultation);
         ConsultationResponse response = ConsultationMapper.toResponse(updatedConsultation);
