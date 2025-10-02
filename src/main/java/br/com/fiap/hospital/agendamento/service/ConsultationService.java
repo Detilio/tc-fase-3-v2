@@ -77,9 +77,9 @@ public class ConsultationService {
     }
 
     /**
-     * Apenas Médicos (DOCTOR) podem editar consultas.
+     * Médicos e Enfermeiros podem editar consultas.
      */
-    @PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR')")
     public ConsultationResponse editarConsulta(Long consultaId, ConsultationRequest request) {
         ConsultationEntity existingConsultation = repository.findById(consultaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada com o ID: " + consultaId));
