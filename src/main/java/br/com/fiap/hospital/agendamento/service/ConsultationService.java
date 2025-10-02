@@ -15,6 +15,7 @@ import br.com.fiap.hospital.user.entity.UserEntity;
 import br.com.fiap.hospital.user.repository.UserRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -69,7 +70,7 @@ public class ConsultationService {
      * Pacientes (PATIENT) só podem ver a sua própria lista.
      */
     @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR') or (hasRole('PATIENT') and #patientId == authentication.principal.id)")
-    public List<ConsultationResponse> listaPaciente(Long patientId) {
+    public List<ConsultationResponse> listaPaciente(@P("patientId") Long patientId) {
         return repository.findByPatientId(patientId)
                 .stream()
                 .map(ConsultationMapper::toResponse)
@@ -100,7 +101,8 @@ public class ConsultationService {
      * @param patientId O ID do paciente.
      * @return Uma lista de ConsultationResponse.
      */
-    public List<ConsultationResponse> listaConsultasFuturasPorPaciente(Long patientId) {
+    @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR') or (hasRole('PATIENT') and #patientId == authentication.principal.id)")
+    public List<ConsultationResponse> listaConsultasFuturasPorPaciente(@P("patientId") Long patientId) {
         LocalDateTime agora = LocalDateTime.now();
 
         return repository.findByPatientIdAndDateAfter(patientId, agora)
