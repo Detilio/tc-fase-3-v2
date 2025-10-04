@@ -8,10 +8,14 @@ import br.com.fiap.hospital.agendamento.repository.ConsultationRepository;
 import br.com.fiap.hospital.config.RabbitMQConfig;
 import br.com.fiap.hospital.notificacao.dto.NotificationDto;
 import br.com.fiap.hospital.notificacao.service.NotificationService;
+import br.com.fiap.hospital.shared.Role;
 import br.com.fiap.hospital.shared.exception.ResourceNotFoundException;
 import br.com.fiap.hospital.shared.exception.ValidateConsultationException;
+import br.com.fiap.hospital.user.entity.UserEntity;
+import br.com.fiap.hospital.user.repository.UserRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,10 +26,12 @@ import java.util.stream.Collectors;
 public class ConsultationService {
     private final ConsultationRepository repository;
     private final RabbitTemplate rabbitTemplate;
+    private final UserRepository userRepository;
 
-    public ConsultationService(ConsultationRepository repository, NotificationService notificationService, RabbitTemplate rabbitTemplate) {
+    public ConsultationService(ConsultationRepository repository, NotificationService notificationService, RabbitTemplate rabbitTemplate, UserRepository userRepository) {
         this.repository = repository;
         this.rabbitTemplate = rabbitTemplate;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -33,21 +39,14 @@ public class ConsultationService {
      */
     @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR')")
     public ConsultationResponse criarConsulta(ConsultationRequest request) {
-        // Vaçoda id do paciente
-        if (!this.validaPaciente(request.getPatientId())) {
-            throw new ResourceNotFoundException("Paciente com ID " + request.getPatientId() + " não encontrado.");
-        }
-        // Valida id do médico
-        if (!this.validaDoutor(request.getDoctorId())) {
-            throw new ResourceNotFoundException("Doutor com ID " + request.getDoctorId() + " não encontrado.");
-        }
 
-        // Valida se já existe consulta agendada nesta data para o paciente
+        validaPaciente(request.getPatientId());
+        validaDoutor(request.getDoctorId());
+
         if (validaDataConsultaPaciente(request.getPatientId(), request.getDate())) {
             throw new ValidateConsultationException("Já existe uma consulta agendada para este paciente nesta mesma data e horário.");
         }
 
-        // Valida se já existe consulta agendada nesta data para o doutor
         if (validaDataConsultaDoutor(request.getDoctorId(), request.getDate())) {
             throw new ValidateConsultationException("Já existe consulta para este doutor nesta mesma data e horário.");
         }
@@ -71,7 +70,7 @@ public class ConsultationService {
      * Pacientes (PATIENT) só podem ver a sua própria lista.
      */
     @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR') or (hasRole('PATIENT') and #patientId == authentication.principal.id)")
-    public List<ConsultationResponse> listaPaciente(Long patientId) {
+    public List<ConsultationResponse> listaPaciente(@P("patientId") Long patientId) {
         return repository.findByPatientId(patientId)
                 .stream()
                 .map(ConsultationMapper::toResponse)
@@ -79,12 +78,26 @@ public class ConsultationService {
     }
 
     /**
-     * Apenas Médicos (DOCTOR) podem editar consultas.
+     * Médicos e Enfermeiros podem editar consultas.
      */
-    @PreAuthorize("hasRole('DOCTOR')")
+    @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR')")
     public ConsultationResponse editarConsulta(Long consultaId, ConsultationRequest request) {
         ConsultationEntity existingConsultation = repository.findById(consultaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada com o ID: " + consultaId));
+
+        // Se trocar data/horário ou médico, valide conflitos
+        Long doctorId = request.getDoctorId();
+        Long patientId = request.getPatientId();
+        LocalDateTime date = request.getDate();
+
+        // conflito com o mesmo médico no mesmo horário (exclui a própria consulta)
+        if (repository.existsByDoctorIdAndDateAndIdNot(doctorId, date, consultaId)) {
+            throw new ValidateConsultationException("Médico já possui consulta nesta data e horário.");
+        }
+        // (opcional) conflito do paciente no mesmo horário
+        if (repository.existsByPatientIdAndDateAndIdNot(patientId, date, consultaId)) {
+            throw new ValidateConsultationException("Paciente já possui consulta nesta data e horário.");
+        }
         ConsultationMapper.updateEntityFromRequest(request, existingConsultation);
         ConsultationEntity updatedConsultation = repository.save(existingConsultation);
         ConsultationResponse response = ConsultationMapper.toResponse(updatedConsultation);
@@ -102,7 +115,8 @@ public class ConsultationService {
      * @param patientId O ID do paciente.
      * @return Uma lista de ConsultationResponse.
      */
-    public List<ConsultationResponse> listaConsultasFuturasPorPaciente(Long patientId) {
+    @PreAuthorize("hasAnyRole('NURSE', 'DOCTOR') or (hasRole('PATIENT') and #patientId == authentication.principal.id)")
+    public List<ConsultationResponse> listaConsultasFuturasPorPaciente(@P("patientId") Long patientId) {
         LocalDateTime agora = LocalDateTime.now();
 
         return repository.findByPatientIdAndDateAfter(patientId, agora)
@@ -114,15 +128,21 @@ public class ConsultationService {
     /**
      * Valida se o paciente existe
      */
-    public boolean validaPaciente(Long patientId) {
-        return repository.existsByPatientId(patientId);
+    public void validaPaciente(Long patientId) {
+        UserEntity patient = userRepository.findById(patientId)
+                .filter(u -> u.getRoles().contains(Role.PATIENT))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Paciente com ID " + patientId + " não encontrado."));
     }
 
     /**
      * Valida se o doutor existe
      */
-    public boolean validaDoutor(Long doctorId) {
-        return repository.existsByDoctorId(doctorId);
+    public void validaDoutor(Long doctorId) {
+        UserEntity doctor = userRepository.findById(doctorId)
+                .filter(u -> u.getRoles().contains(Role.DOCTOR))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Doutor com ID " + doctorId + " não encontrado."));
     }
 
     /**
